@@ -282,11 +282,7 @@ class pulse_stretch_class:
         f = gaussian_profile(t, 1, 0, c).astype(np.complex128)
 
         # Frequency Domain
-        freqs = np.fft.fftshift(np.fft.fftfreq(self.n_points, d=dt))
-        omega = freqs * 2 * pi
-
-        
-        
+        omega, F = time_to_freq_fft(t, f)
 
         return t, f, omega, F 
 
