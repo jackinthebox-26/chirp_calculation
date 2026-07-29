@@ -154,6 +154,49 @@ def gaussian_profile(t, a, b, c):
     """
     return a * np.exp(-(t - b) ** 2 / (2 * c **2 ))
 
+def time_to_freq_fft(t, f):
+    """
+    Convert a time-domain field envelope to the frequency domain using the FFT.
+
+    Parameters
+    ----------
+    t : array_like
+        Equally spaced 1D array of time points in seconds.
+    f : array_like
+        1D real or complex array representing the electric field envelope in 
+        the time domain.
+
+    Returns
+    -------
+    omega : ndarray
+        1D array of relative angular frequencies in radians per second (rad/s), 
+        centered at zero.
+    E_omega : ndarray
+        1D complex array representing the spectral envelope in the frequency domain.
+
+    Notes
+    -----
+    This function approximates the continuous Fourier transform:
+
+        E(omega) = integral_{-inf}^{inf} f(t) * exp(-i * omega * t) dt
+
+    Key numerical details applied:
+    - `np.fft.ifftshift(f)` shifts t = 0 to index 0 prior to FFT to eliminate 
+      artificial linear phase slopes.
+    - `np.fft.fftshift` centers zero angular frequency (omega = 0) at the array midpoint.
+    - Multiplication by time step `dt` scales the discrete transform to preserve 
+      physical units.
+    """
+    n_points = len(t)
+    dt = t[1] - t[0]
+
+    freqs = np.fft.fftfreq(n_points, d=dt)
+    omega = 2 * pi * np.fft.fftshift(freqs)
+
+    E_omega = np.fft.fftshift(np.fft.fft(np.fft.ifftshift(f))) * dt
+
+    return omega, E_omega
+
 @dataclass
 class pulse_stretch_class:
     center_lambda: float = 256e-9  # meter
