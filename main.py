@@ -286,6 +286,14 @@ class pulse_stretch_class:
 
         return t, f, omega, F 
 
+    def apply_GDD(self, GDD):
+        F_in = self.F
+        F_out = F_in * np.exp(-1j * GDD * self.omega ** 2 / 2)
+
+        self.F = F_out
+
+        self.t, self.f = freq_to_time_fft(self.omega, self.F)
+
 
 
 def main():
