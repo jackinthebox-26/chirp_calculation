@@ -283,6 +283,8 @@ class pulse_stretch_class:
 
     def __post_init__(self):
         self.t, self.f, self.omega, self.F = self.init_arrays()
+        if self.gdd_init != 0 :
+            self.apply_GDD(self.gdd_init)
 
     def __str__(self):
         str_str = f"Center Wavelength: {self.center_lambda*1e9} nm\n"
