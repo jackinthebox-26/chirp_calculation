@@ -11,6 +11,11 @@ c = sp.constants.c
 def wavelength_to_ang_freq(wavelength):
     return 2 * pi * c / wavelength
 
+def TBP_limited_length(wavelength, fwhm_wavelength):
+    delta_nu = wavelength_fwhm_to_ang_freq_fwhm(wavelength, fwhm_wavelength) / (2 * pi)
+    return 2 * np.log(2) / (pi * delta_nu)
+
+
 def gaussian_profile(t, a, b, c):
     return a * np.exp(-(t - b) ** 2 / (2 * c **2 ))
 
