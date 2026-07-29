@@ -11,6 +11,9 @@ c = sp.constants.c
 def wavelength_to_ang_freq(wavelength):
     return 2 * pi * c / wavelength
 
+def gaussian_profile(t, a, b, c):
+    return a * np.exp(-(t - b) ** 2 / (2 * c **2 ))
+
 @dataclass
 class pulse_stretch_class:
     center_lambda: float = 256e-9  # meter
