@@ -16,6 +16,12 @@ def TBP_limited_length(wavelength, fwhm_wavelength):
     return 2 * np.log(2) / (pi * delta_nu)
 
 
+def wavelength_fwhm_to_ang_freq_fwhm(wavelength, fwhm_wavelength):
+    ang_freq_1 = wavelength_to_ang_freq(wavelength - fwhm_wavelength / 2)
+    ang_freq_2 = wavelength_to_ang_freq(wavelength + fwhm_wavelength / 2)
+
+    return np.abs(ang_freq_2 - ang_freq_1)
+
 def gaussian_profile(t, a, b, c):
     return a * np.exp(-(t - b) ** 2 / (2 * c **2 ))
 
