@@ -2,6 +2,14 @@ from dataclasses import dataclass
 
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy as sp
+
+
+pi = np.pi
+c = sp.constants.c
+
+def wavelength_to_ang_freq(wavelength):
+    return 2 * pi * c / wavelength
 
 @dataclass
 class pulse_stretch_class:
