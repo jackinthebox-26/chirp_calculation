@@ -28,7 +28,7 @@ class pulse_stretch_class:
 
     def __str__(self):
         str_str = f"Center Wavelength: {self.center_lambda*1e9} nm\n"
-        str_str += f"FWHM Wavelength: {self.fwhm_lambda*1e9} nm\n"
+        str_str += f"Initial FWHM Wavelength: {self.fwhm_lambda*1e9} nm\n"
         str_str += f"Initial GDD: {self.gdd_init}\n"
         return str_str
 
