@@ -31,8 +31,8 @@ class pulse_stretch_class:
     fwhm_lambda: float = 0.8e-9  # meter
     gdd_init: float = 0  # s^2
 
-    n_points: int = 2 ** 5  # []
-    t_max: float = 1e-9  # second
+    n_points: int = 2 ** 8  # []
+    t_max: float = 1e-12  # second
 
     def __post_init__(self):
         self.init_arrays()
