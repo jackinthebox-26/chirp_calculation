@@ -45,7 +45,8 @@ class pulse_stretch_class:
 
     def init_arrays(self):
         t = np.linspace(-self.t_max, self.t_max, self.n_points)
-        F = t
+        c = TBP_limited_length(self.center_lambda, self.fwhm_lambda)
+        F = gaussian_profile(t, 1, 0, c)
         plt.plot(t, F)
         plt.show()
         
