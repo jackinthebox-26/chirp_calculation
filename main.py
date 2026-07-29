@@ -197,6 +197,65 @@ def time_to_freq_fft(t, f):
 
     return omega, E_omega
 
+def freq_to_time_fft(omega, F):
+    """
+    Convert a spectral envelope from frequency domain to time domain using IFFT.
+
+    Parameters
+    ----------
+    omega : array_like
+        Equally spaced 1D array of relative angular frequencies in rad/s,
+        centered at zero.
+    F : array_like
+        1D complex array representing the spectral envelope in the frequency domain.
+
+    Returns
+    -------
+    t : ndarray
+        1D array of time points in seconds, centered at zero.
+    f : ndarray
+        1D complex array representing the field envelope in the time domain.
+
+    Notes
+    -----
+    This function evaluates the continuous inverse Fourier transform:
+
+        f(t) = (1 / (2 * pi)) * integral_{-inf}^{inf} F(omega) * exp(i * omega * t) d_omega
+
+    Detailed breakdown of the transformation chain 
+    `np.fft.fftshift(np.fft.ifft(np.fft.ifftshift(F))) / dt`:
+
+    1. `np.fft.ifftshift(F)`
+       Un-shifts the input spectrum `F`. Standard FFT functions expect the 0 Hz bin 
+       at index 0, but `F` is centered (0 Hz at index N//2). `ifftshift` moves 
+       zero frequency back to index 0 so the IFFT algorithm interprets phase 
+       and frequency correctly.
+
+    2. `np.fft.ifft(...)`
+       Executes the Inverse Discrete Fourier Transform (IDFT) on the un-shifted 
+       spectrum, converting the frequency data back into the time domain.
+
+    3. `np.fft.fftshift(...)`
+       Shifts the resulting time-domain output array so that t = 0 is moved 
+       from index 0 back to the center of the array (index N//2), aligning with 
+       the centered time vector `t`.
+
+    4. `/ dt`
+       Normalizes the discrete output. Dividing by `dt` inverts the `* dt` scaling 
+       applied in `time_to_freq_fft`, matching continuous Fourier integral units 
+       and ensuring exact amplitude/energy conservation during round trips.
+    """
+    n_points = len(omega)
+    d_omega = omega[1] - omega[0]
+
+    df = d_omega / (2 * pi)
+    dt = 1 / (n_points * df)
+    t = np.fft.fftshift(np.fft.fftfreq(n_points, d=df))
+
+    f = np.fft.fftshift(np.fft.ifft(np.fft.ifftshift(F))) / dt
+
+    return t, f
+
 @dataclass
 class pulse_stretch_class:
     center_lambda: float = 256e-9  # meter
