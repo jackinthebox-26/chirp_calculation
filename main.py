@@ -17,6 +17,19 @@ c = sp.constants.c
 def fwhm_to_sigma(fwhm):
     return fwhm / ( 2 * np.sqrt(2 * np.log(2)))
 
+def find_fwhm(t, f):
+    f = np.abs(f)**2
+    half_max = np.max(f) / 2.0
+    
+    # Find indices above half max
+    above_half = np.where(f >= half_max)[0]
+    left_idx, right_idx = above_half[0], above_half[-1]
+    
+    # Linear interpolation at the half-maximum crossing points
+    left_x = np.interp(half_max, f[left_idx-1:left_idx+1], t[left_idx-1:left_idx+1])
+    right_x = np.interp(half_max, f[right_idx:right_idx+2][::-1], t[right_idx:right_idx+2][::-1])
+    
+    return right_x - left_x
 
 def wavelength_to_ang_freq(wavelength):
     """
