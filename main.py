@@ -313,7 +313,12 @@ class pulse_stretch_class:
         self.t, self.f = freq_to_time_fft(self.omega, self.F)
 
     def plot_pulse(self):
-        plt.plot(self.t, np.abs(self.f)**2)
+        fig, ax = plt.subplots(1, 2)
+        title=f"{find_fwhm(self.t, self.f)}"
+        ax[0].plot(self.t, np.abs(self.f)**2/np.max(np.abs(self.f)**2))
+        ax[0].set_xlabel('Time (s)')
+        ax[0].set_title(title)
+        ax[1].plot(self.omega, np.abs(self.F)**2/np.max(np.abs(self.F)**2))
         plt.show()
 
 
