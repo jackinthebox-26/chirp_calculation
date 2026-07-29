@@ -1,3 +1,9 @@
+"""
+
+This package uses a shifted carrier to make the calculations easier.
+
+
+"""
 from dataclasses import dataclass
 
 import numpy as np
@@ -31,8 +37,8 @@ class pulse_stretch_class:
     fwhm_lambda: float = 0.8e-9  # meter
     gdd_init: float = 0  # s^2
 
-    n_points: int = 2 ** 8  # []
-    t_max: float = 1e-12  # second
+    n_points: int = 2 ** 15  # []
+    t_max: float = 100e-12  # second
 
     def __post_init__(self):
         self.init_arrays()
