@@ -15,7 +15,7 @@ pi = np.pi
 c = sp.constants.c
 
 def fwhm_to_sigma(fwhm):
-    return fwhm / ( 2 * np.sqrt(2 * np.log(2)))
+    return fwhm / ( 2 * np.sqrt(np.log(2)))
 
 def find_fwhm(t, f):
     f = np.abs(f)**2
@@ -265,7 +265,7 @@ def freq_to_time_fft(omega, F):
     d_omega = omega[1] - omega[0]
 
     df = d_omega / (2 * pi)
-    dt = 1 / df
+    dt = 1 / (n_points * df)
     t = np.fft.fftshift(np.fft.fftfreq(n_points, d=df))
 
     f = np.fft.fftshift(np.fft.ifft(np.fft.ifftshift(F))) / dt
