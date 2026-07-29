@@ -303,6 +303,9 @@ class pulse_stretch_class:
 def main():
     """Main method."""
     test_class = pulse_stretch_class()
+    test_class.plot_pulse()
+    test_class.apply_GDD(5e-25)
+    test_class.plot_pulse()
 
     print(test_class)
 
