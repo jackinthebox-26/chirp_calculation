@@ -207,7 +207,7 @@ class pulse_stretch_class:
     t_max: float = 100e-12  # second
 
     def __post_init__(self):
-        self.t, self.F = self.init_arrays()
+        self.t, self.f, self.omega, self.F = self.init_arrays()
 
     def __str__(self):
         str_str = f"Center Wavelength: {self.center_lambda*1e9} nm\n"
@@ -216,10 +216,20 @@ class pulse_stretch_class:
         return str_str
 
     def init_arrays(self):
+        # Time Domain
         t = np.linspace(-self.t_max, self.t_max, self.n_points)
-        c = TBP_limited_length(self.center_lambda, self.fwhm_lambda)
-        F = gaussian_profile(t, 1, 0, c)
-        return t, F 
+        dt = t[1] - t[0]
+        c = TBP_limited_length(self.center_lambda, self.fwhm_lambda) / (2 * np.sqrt(np.log(2)))
+        f = gaussian_profile(t, 1, 0, c).astype(np.complex128)
+
+        # Frequency Domain
+        freqs = np.fft.fftshift(np.fft.fftfreq(self.n_points, d=dt))
+        omega = freqs * 2 * pi
+
+        
+        
+
+        return t, f, omega, F 
 
 
 
