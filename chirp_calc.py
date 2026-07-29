@@ -278,8 +278,8 @@ class pulse_stretch_class:
     fwhm_lambda: float = 0.8e-9  # meter
     gdd_init: float = 0  # s^2
 
-    n_points: int = 2 ** 15  # []
-    t_max: float = 100e-12  # second
+    n_points: int = 2 ** 24  # []
+    t_max: float = 100e-9  # second
 
     def __post_init__(self):
         self.t, self.f, self.omega, self.F = self.init_arrays()
@@ -321,13 +321,16 @@ class pulse_stretch_class:
         ax[1].plot(self.omega, np.abs(self.F)**2/np.max(np.abs(self.F)**2))
         plt.show()
 
+    def get_fwhm(self):
+        return find_fwhm(self.t, self.f)
+
 
 
 def main():
     """Main method."""
     test_class = pulse_stretch_class()
     test_class.plot_pulse()
-    test_class.apply_GDD(5e-25)
+    test_class.apply_GDD(5e-22)
     test_class.plot_pulse()
 
     print(test_class)
