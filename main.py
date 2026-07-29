@@ -294,9 +294,9 @@ class pulse_stretch_class:
 
     def init_arrays(self):
         # Time Domain
-        t = np.linspace(-self.t_max, self.t_max, self.n_points)
-        dt = t[1] - t[0]
-        c = TBP_limited_length(self.center_lambda, self.fwhm_lambda) / (2 * np.sqrt(np.log(2)))
+        dt = (2 * self.t_max) / self.n_points
+        t = np.linspace(-self.t_max, self.t_max, self.n_points, endpoint=False)
+        c = fwhm_to_sigma(TBP_limited_length(self.center_lambda, self.fwhm_lambda))
         f = gaussian_profile(t, 1, 0, c).astype(np.complex128)
 
         # Frequency Domain
