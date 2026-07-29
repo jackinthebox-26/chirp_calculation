@@ -14,6 +14,9 @@ import scipy as sp
 pi = np.pi
 c = sp.constants.c
 
+def fwhm_to_sigma(fwhm):
+    return fwhm / ( 2 * np.sqrt(2 * np.log(2)))
+
 
 def wavelength_to_ang_freq(wavelength):
     """
