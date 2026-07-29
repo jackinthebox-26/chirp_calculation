@@ -294,6 +294,10 @@ class pulse_stretch_class:
 
         self.t, self.f = freq_to_time_fft(self.omega, self.F)
 
+    def plot_pulse(self):
+        plt.plot(self.t, np.abs(self.f)**2)
+        plt.show()
+
 
 
 def main():
