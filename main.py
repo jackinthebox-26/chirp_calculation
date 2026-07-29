@@ -265,7 +265,7 @@ def freq_to_time_fft(omega, F):
     d_omega = omega[1] - omega[0]
 
     df = d_omega / (2 * pi)
-    dt = 1 / (n_points * df)
+    dt = 1 / df
     t = np.fft.fftshift(np.fft.fftfreq(n_points, d=df))
 
     f = np.fft.fftshift(np.fft.ifft(np.fft.ifftshift(F))) / dt
