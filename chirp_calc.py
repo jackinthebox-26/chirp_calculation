@@ -325,16 +325,70 @@ class pulse_stretch_class:
         return find_fwhm(self.t, self.f)
 
 
+def find_init_gdd(center_wavelength, fwhm_wavelength, pulse_length):
+    tau_0 = TBP_limited_length(center_wavelength, fwhm_wavelength)
+    return tau_0 * np.sqrt(pulse_length ** 2 - tau_0 ** 2) / (4 * np.log(2))
+
+
+def test_setup():
+    UV_silica_GVD = 130_000e-30
+    PBC_gdd = UV_silica_GVD * 12.5e-3
+    lens_gdd = UV_silica_GVD * 5e-3
+
+
+    pulse_length_array = []
+    element_array = []
+    gdd_init = find_init_gdd(256e-9, 0.8e-9, 400e-15)
+
+
+    test_class = pulse_stretch_class()
+    element_array.append('Transform limited')
+    pulse_length_array.append(test_class.get_fwhm())
+
+
+    test_class.apply_GDD(gdd_init)
+    element_array.append('Initial')
+    pulse_length_array.append(test_class.get_fwhm())
+
+    test_class.apply_GDD(PBC_gdd)  # First PBC
+    element_array.append('PBC')
+    pulse_length_array.append(test_class.get_fwhm())
+
+    test_class.apply_GDD(lens_gdd)  # First reshaping lens
+    element_array.append('Reshaping lens 1')
+    pulse_length_array.append(test_class.get_fwhm())
+
+    test_class.apply_GDD(lens_gdd)  # Second reshaping lens
+    element_array.append('Reshaping lens 2')
+    pulse_length_array.append(test_class.get_fwhm())
+
+    test_class.apply_GDD(lens_gdd)  # Focusing lens
+    element_array.append('Focusing lens 1')
+    pulse_length_array.append(test_class.get_fwhm())
+
+    test_class.apply_GDD(lens_gdd)  # Collimating lens
+    element_array.append('Collimating lens')
+    pulse_length_array.append(test_class.get_fwhm())
+
+    test_class.apply_GDD(lens_gdd)  # Focusing lens
+    element_array.append('Focusing lens 2')
+    pulse_length_array.append(test_class.get_fwhm())
+
+    pulse_length_array = np.array(pulse_length_array)
+
+
+    plt.semilogy(element_array, pulse_length_array * 1e15, '-o')
+    plt.xlabel('Element')
+    plt.ylabel('Pulse length (fs)')
+    plt.xticks(rotation=90)
+    plt.grid(True, axis='both', which='both')
+    plt.tight_layout()
+    plt.savefig('pulse_length_test.png')
+
 
 def main():
     """Main method."""
-    test_class = pulse_stretch_class()
-    test_class.plot_pulse()
-    test_class.apply_GDD(5e-22)
-    test_class.plot_pulse()
-
-    print(test_class)
-
+    test_setup()
 
 if __name__ == "__main__":
     main()
