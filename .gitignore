@@ -7,3 +7,6 @@ __pycache_/
 # Virtual environment
 
 venv/
+
+# Image files
+*.png
